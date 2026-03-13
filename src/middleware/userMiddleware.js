@@ -1,0 +1,37 @@
+const jwt=require("jsonwebtoken");
+const User=require("../model/user");
+const userMiddleware=async(req,res,next)=>{
+    try{
+        console.log("Cookies:", req.cookies);
+        const {token}=req.cookies;
+        if(!token)
+            throw new Error("Token is not present");
+        const payload = jwt.verify(token,process.env.JWT_KEY);
+        console.log(token);
+        const {_id}=payload;
+
+        if(!_id){
+            throw new Error("Invalid token");
+
+        }
+
+        const result = await User.findById(_id);
+        if(!result){
+            throw new Error("User Doesn't Exist");
+        }
+
+        //Redis Ke blockList mein present toh nahi hai
+        //  const IsBlocked = await redisClient.exists(`token:${token}`);
+
+        //  if(IsBlocked)
+        //     throw new Error("Invalid Token");
+         req.user = result;
+
+        next();
+    }
+    catch(err){
+        res.send("Error: "+ err.message);
+    }
+}
+
+module.exports=userMiddleware;
