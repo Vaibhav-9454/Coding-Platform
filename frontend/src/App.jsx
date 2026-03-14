@@ -2,14 +2,30 @@ import {Routes, Route, Navigate } from "react-router";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import HomePage from "./Pages/HomePage";
+import AdminPanel from "./Pages/AdminPanel";
 import {checkAuth} from "./authSlice"
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
+import Editor from "./Pages/Editor";
+
+
+// function Editor() {
+//   return (
+//     <div style={{ height: '100vh' }}>
+//       <editor />   {/* 👈 This renders your editor */}
+//     </div>
+//   );
+// }
+
+
 
 function App(){
   const dispatch = useDispatch();
   const {isAuthenticated, user, loading}=useSelector((state)=>state.auth);
-  
+    
+  console.log("isAuthenticated:", isAuthenticated);
+console.log("user:", user);
+console.log("role:", user?.role);
 
   useEffect(()=>{
     dispatch(checkAuth());
@@ -28,10 +44,27 @@ function App(){
       <Route path="/" element={isAuthenticated ? <HomePage></HomePage>:<Navigate to="/signup"/>}></Route>
       <Route path="/login" element={isAuthenticated?<Navigate to="/"/>:<Login></Login>}></Route>
       <Route path="/signup" element={isAuthenticated?<Navigate to="/"/>:<Signup></Signup>}></Route>
+      <Route path="/editor" element={<Editor />} />
+     {/* <Route
+  path="/admin"
+  element={
+   isAuthenticated && user?.role === "admin"
+      ? <AdminPanel />
+      : <Navigate to="/" />
+  }
+/> */}
+
+
       <Route path="/admin" element={<AdminPanel/>}></Route>
+   
 
     </Routes>
     </>
   )
 }
 export default App;
+
+
+
+
+

@@ -1,6 +1,7 @@
 const {getLanguageById, submitBatch, submitToken} = require("../Utils/problemUtility");
 const Problem = require("../model/problem");
-
+const User = require("../model/user");
+const Submission = require("../model/Submission");
 
 
 const createProblem=async(req,res)=>{
@@ -54,7 +55,7 @@ const createProblem=async(req,res)=>{
 
   const userProblem = await Problem.create({
     ...req.body,
-    problemCreator: req.result._id
+    problemCreator: req.user._id
    });
 
    res.status(201).send("Problem Saved Successfully");
@@ -184,28 +185,38 @@ const  getAllProblem=async(req,res)=>{
 }
 
 
-const solvedAllProblembyUser=async(req,res)=>{
-    try{
-       const userId = req.result._id;
-       const user = await User.findById(userId).populate({
-        path:"problemSolved",
-        select:"_id title difficulty tags"
-       }); 
-       res.status(200).send(user.problemSolved);
-    }
-    catch(err){
-      res.status(500).send("Server Error");
-    }
-}
+const solvedAllProblembyUser = async (req, res) => {
+  try {
 
+    const userId = req.user._id;
+
+    const user = await User.findById(userId).populate({
+      path: "problemSolved",
+      select: "_id title difficulty tags"
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user.problemSolved);
+
+  } catch (err) {
+
+    console.error(err);
+
+    res.status(500).json({ message: "Server Error" });
+  }
+};
 const submittedProblem = async(req,res)=>{
   try{
     const userId = req.user._id;
-    const problmeId = req.params.pid;
+    const problemId = req.params.pid;
 
     const ans = await Submission.find({userId, problemId});
-    if(ans.length==0)
-      res.status(200).send("No Submission is present");
+    if(ans.length===0){
+     return res.status(200).send("No Submission is present");
+    }
 
     res.status(200).send(ans);
   }

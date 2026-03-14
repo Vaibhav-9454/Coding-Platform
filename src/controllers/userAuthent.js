@@ -2,7 +2,7 @@ const User=require("../model/user");
 const Validate=require('../Utils/validators');
 const bcrypt=require("bcrypt");
 const jwt=require("jsonwebtoken");
-const  Submission=require("../model/submission");
+const  Submission=require("../model/Submission");
 
 
 const register=async (req,res)=>{
@@ -20,7 +20,8 @@ const register=async (req,res)=>{
       const reply = {
           firstName:user.firstName,
           emailId:user.emailId,
-          _id:user._id
+          _id:user._id,
+          role:user.role,
         }
 
       res.cookie('token',token,{maxAge:60*60*1000});

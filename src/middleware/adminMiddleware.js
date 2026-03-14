@@ -26,8 +26,8 @@ const adminMiddleware=async(req,res,next)=>{
 
         //  if(IsBlocked)
         //     throw new Error("Invalid Token");
-        req.result = result;
-
+        req.user = result;
+          console.log("Authenticated Admin:", req.user);
         next();
     }
     catch(err){

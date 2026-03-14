@@ -34,7 +34,7 @@ role:{
 problemSolved:{
     type:[{
         type:Schema.Types.ObjectId,
-        ref:'problem',
+        ref:'Problem',
     
     }],
     default:[]
