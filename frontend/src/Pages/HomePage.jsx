@@ -156,52 +156,27 @@ return (
 {/* Problems List */}
 <div className="grid gap-4">
   {filteredProblems.map((problem) => (
-    <div key={problem._id} className="card bg-base-100 shadow-xl">
-
+  <NavLink key={problem._id} to={`/problem/${problem._id}`}>
+    <div className="card bg-base-100 shadow-xl hover:shadow-2xl cursor-pointer">
+      
       <div className="card-body">
+        <h2 className="card-title">{problem.title}</h2>
 
-        <div className="flex items-center justify-between">
+        <div className="flex gap-2">
+          <div className={`badge ${getDifficultyBadgeColor(problem.difficulty)}`}>
+            {problem.difficulty}
+          </div>
 
-          <h2 className="card-title">
-            {problem.title}
-          </h2>
-
-          {solvedProblems.some((sp) => sp._id === problem._id) && (
-            <div className="badge badge-success gap-2">
-
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-
-              Solved
-            </div>
-          )}
-
+          <div className="badge badge-info">
+            {problem.tags}
+          </div>
         </div>
-         <div className="flex gap-2">
 
-  <div className={`badge ${getDifficultyBadgeColor(problem.difficulty)}`}>
-    {problem.difficulty}
-  </div>
-
-  <div className="badge badge-info">
-    {problem.tags}
-  </div>
-
-</div>
       </div>
 
     </div>
-  ))}
+  </NavLink>
+))}
 </div>
   </div>
   </div>

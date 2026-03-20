@@ -6,7 +6,7 @@ import AdminPanel from "./Pages/AdminPanel";
 import {checkAuth} from "./authSlice"
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
-import Editor from "./Pages/Editor";
+import ProblemPage from "./Pages/ProblemPage";
 
 
 // function Editor() {
@@ -44,7 +44,7 @@ console.log("role:", user?.role);
       <Route path="/" element={isAuthenticated ? <HomePage></HomePage>:<Navigate to="/signup"/>}></Route>
       <Route path="/login" element={isAuthenticated?<Navigate to="/"/>:<Login></Login>}></Route>
       <Route path="/signup" element={isAuthenticated?<Navigate to="/"/>:<Signup></Signup>}></Route>
-      <Route path="/editor" element={<Editor />} />
+      <Route path="/problem/:problemId" element={<ProblemPage />}></Route> 
      {/* <Route
   path="/admin"
   element={
