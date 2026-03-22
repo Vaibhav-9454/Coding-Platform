@@ -91,7 +91,7 @@ return (
         <div className="dropdown dropdown-end">
 
           <div tabIndex={0} className="btn btn-ghost">
-            Profile
+            {user?.firstName}
           </div>
 
           <ul className="mt-3 p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box">
@@ -101,7 +101,7 @@ return (
                 Logout
               </button>
             </li>
-
+            {user.role=='admin' && <li><NavLink to="/admin">Admin</NavLink></li>}
           </ul>
 
         </div>
