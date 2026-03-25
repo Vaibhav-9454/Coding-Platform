@@ -45,7 +45,11 @@ import axiosClient from "../utils/axiosClient";
 
 // 6821d59f08b1a543085829bc
 // Problem: Actual Data fetch from backend
-
+const langMap={
+  cpp: 'C++',
+  java:'Java',
+  javascript:'JavaScript'
+};
 const ProblemPage = () => {
   const [problem, setProblem] = useState(null);
   const [selectedLanguage, setSelectedLanguage] = useState("javascript");
@@ -59,49 +63,51 @@ const ProblemPage = () => {
   let { problemId } = useParams();
 
   const { handleSubmit } = useForm();
-
+   
   useEffect(() => {
-    const fetchProblem = async () => {
-      setLoading(true);
-      try {
-        const response = await axiosClient.get(`/problem/problemById/${problemId}`);
+  const fetchProblem = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosClient.get(
+        `/problem/problemById/${problemId}`
+      );
 
-        const initialCode =
-          response.data.startCode.find((sc) => {
-            if (sc.language === "C++" && selectedLanguage === "cpp") return true;
-            else if (sc.language === "Java" && selectedLanguage === "java") return true;
-            else if (sc.language === "Javascript" && selectedLanguage === "javascript") return true;
+      console.log("DATA:", response.data); // debug
 
-            return false;
-          })?.initialCode || "Hello";
+      const matched = response.data.startCode?.find(
+        (sc) =>
+          sc.language.toLowerCase() ===
+          langMap[selectedLanguage].toLowerCase()
+      );
 
-        console.log(initialCode);
-        setProblem(response.data);
-        setCode(initialCode);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching problem:", error);
-        setLoading(false);
-      }
-    };
+      const initialCode =
+        matched?.initialCode || "// Write your code here";
 
-    fetchProblem();
-  }, [problemId]);
+      setProblem(response.data);
+      setCode(initialCode);
+    } catch (error) {
+      console.error("Error fetching problem:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProblem();
+}, [problemId]);
 
   // Update code when language changes
   useEffect(() => {
-    if (!problem) return;
+   if (problem) {
+  const matched = problem.startCode?.find(
+    sc => sc.language === langMap[selectedLanguage]
+  );
 
-    const initialCode =
-      problem.startCode?.find((sc) => {
-        if (sc.language === "C++" && selectedLanguage === "cpp") return true;
-        else if (sc.language === "Java" && selectedLanguage === "java") return true;
-        else if (sc.language === "Javascript" && selectedLanguage === "javascript") return true;
+  setCode(matched?.initialCode || "// Write your code here");
+}
 
-        return false;
-      })?.initialCode || "";
-
-    setCode(initialCode);
+   
+      
+    
   }, [selectedLanguage, problem]);
 
   const handleEditorChange = (value) => {

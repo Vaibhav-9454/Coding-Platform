@@ -10,7 +10,8 @@ import ProblemPage from "./Pages/ProblemPage";
 import Admin from "./Pages/Admin";
 import AdminDelete from "./components/AdminDelete";
 import AdminPanel from "./components/AdminPanel";
-// import SubmissionHistory from "./components/SubmissionHistory";
+import SubmissionHistory from "./components/SubmissionHistory";
+import AdminUpdate from "./components/AdminUpdate"
 
 
 
@@ -53,6 +54,8 @@ console.log("role:", user?.role);
       <Route path="/admin" element={isAuthenticated && user?.role==='admin'?<Admin/>:<Navigate to="/"/>}/> 
      <Route path="/admin/create" element={isAuthenticated && user?.role==='admin' ? <AdminPanel/>:<Navigate to="/"/>}/>
       <Route path="/admin/delete" element={isAuthenticated && user?.role==='admin' ? <AdminDelete/>:<Navigate to="/"/>}/> 
+      <Route path="/admin/update" element={isAuthenticated && user?.role==='admin' ? <AdminUpdate/>:<Navigate to="/"/>}/> 
+      
 
       <Route path="/problem/:problemId" element={<ProblemPage />}></Route>  
      {/* <Route

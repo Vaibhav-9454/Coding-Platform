@@ -9,17 +9,23 @@ const AdminDelete = () => {
 
   // Fetch all problems
   const fetchProblems = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axiosClient.get("/problem/getAllProblem");
-      setProblems(data);
-      setError(null);
-    } catch (err) {
-      setError(err.message || "Failed to fetch problems");
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    setLoading(true);
+    const res = await axiosClient.get("/problem/getAllProblem");
+
+    const problemsData = Array.isArray(res.data)
+      ? res.data
+      : res.data.data || [];
+
+    setProblems(problemsData);
+    setError(null);
+  } catch (err) {
+    console.error(err);
+    setError("Failed to fetch problems");
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     fetchProblems();
@@ -124,7 +130,10 @@ const AdminDelete = () => {
                     {/* Tags */}
                     <td>
                       <span className="badge badge-outline">
-                        {problem.tags?.join(", ")}
+                        {
+                        Array.isArray(problem.tags)
+                        ?problem.tags?.join(", ")
+                      :problem.tags || "No tags"}
                       </span>
                     </td>
 
