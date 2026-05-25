@@ -42,6 +42,8 @@ import { useForm } from "react-hook-form";
 import Editor from "@monaco-editor/react";
 import { useParams } from "react-router";
 import axiosClient from "../utils/axiosClient";
+import SubmissionHistory from "../components/SubmissionHistory";
+import ChatAi from "../components/ChatAi";
 
 // 6821d59f08b1a543085829bc
 // Problem: Actual Data fetch from backend
@@ -237,6 +239,13 @@ const ProblemPage = () => {
           >
             Submissions
           </button>
+
+          <button
+            className={`tab ${activeLeftTab === "chatAI" ? "tab-active" : ""}`}
+            onClick={() => setActiveLeftTab("chatAI")}
+          >
+            ChatAI
+          </button>
         </div>
 
         {/* Left Content */}
@@ -347,6 +356,16 @@ const ProblemPage = () => {
 
                   <div className="text-gray-500">
                     Your submission history will appear here.
+                  </div>
+                </div>
+              )}
+
+                       {activeLeftTab === "chatAI" && (
+                <div className="prose max-w-none">
+                  <h2 className="text-xl font-bold mb-4">CHAT with AI</h2>
+
+                  <div className="whitespace-pre-wrap text-sm leading-relaxed">
+                   <ChatAi problem={problem}></ChatAi>
                   </div>
                 </div>
               )}
@@ -510,7 +529,7 @@ const ProblemPage = () => {
                       </div>
                     ) : (
                       <div>
-                        <h4 className="font-bold">❌ Error</h4>
+                        <h4 className="font-bold"> Error</h4>
 
                         <div className="mt-4 space-y-2">
                           {runResult.testCases?.map((tc, i) => (
@@ -535,7 +554,7 @@ const ProblemPage = () => {
                                       : "text-red-600"
                                   }
                                 >
-                                  {tc.status_id === 3 ? "✔ Passed" : "❌ Failed"}
+                                  {tc.status_id === 3 ? "✔ Passed" : " Failed"}
                                 </div>
                               </div>
                             </div>
